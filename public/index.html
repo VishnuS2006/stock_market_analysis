@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Market Event Correlator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>📊 Stock Market Event Correlator</h1>
+
+    <!-- Add Stock Section -->
+    <div class="card">
+        <h2>Add Stock</h2>
+        <input type="text" id="stockName" placeholder="Stock Name">
+        <input type="text" id="symbol" placeholder="Symbol">
+        <input type="text" id="sector" placeholder="Sector">
+        <input type="number" id="price" placeholder="Current Price">
+        <button onclick="addStock()">Add Stock</button>
+    </div>
+
+    <!-- Add Event Section -->
+    <div class="card">
+        <h2>Add Market Event</h2>
+        <input type="text" id="eventTitle" placeholder="Event Title">
+        <input type="text" id="eventDesc" placeholder="Description">
+        <input type="date" id="eventDate">
+        <select id="impact">
+            <option value="Positive">Positive</option>
+            <option value="Negative">Negative</option>
+            <option value="Neutral">Neutral</option>
+        </select>
+        <input type="number" id="change" placeholder="Price Change %">
+        <select id="stockSelect"></select>
+        <button onclick="addEvent()">Add Event</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="card">
+    <h2>📈 Correlation Dashboard</h2>
+    <canvas id="correlationChart"></canvas>
+    <div id="dashboard"></div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
