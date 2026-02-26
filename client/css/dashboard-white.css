@@ -1,0 +1,281 @@
+.premium-card, .glass-card, .premium-table table, .premium-modal {
+	transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+.premium-btn, .modal-btn {
+	transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+.premium-form input, .premium-form select {
+	transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.premium-navbar .nav-link, .premium-navbar .dropdown-link {
+	transition: background 0.2s, color 0.2s;
+}
+.premium-navbar .profile-avatar {
+	transition: box-shadow 0.2s, border-color 0.2s;
+}
+.premium-scroll {
+	scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+	.premium-card {
+		flex-direction: column;
+		gap: 10px;
+		padding: 16px;
+	}
+	.premium-table table {
+		font-size: 0.95rem;
+	}
+	.premium-modal {
+		padding: 16px;
+		max-width: 98vw;
+	}
+}
+@media (max-width: 480px) {
+	.premium-card {
+		padding: 8px;
+		font-size: 0.92rem;
+	}
+	.premium-table th, .premium-table td {
+		padding: 8px;
+	}
+	.premium-modal {
+		padding: 8px;
+		max-width: 99vw;
+	}
+}
+
+body {
+	background: linear-gradient(135deg, #f4f6fa 0%, #e0e7ef 100%);
+	color: #22223b;
+	font-family: 'Manrope', 'Outfit', 'Segoe UI', Arial, sans-serif;
+	min-height: 100vh;
+}
+
+.premium-table table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	background: #fff;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+	border-radius: 16px;
+	overflow: hidden;
+}
+.premium-table th {
+	position: sticky;
+	top: 0;
+	background: linear-gradient(90deg, #6366f1 0%, #3b82f6 100%);
+	color: #fff;
+	font-weight: 600;
+	padding: 16px;
+	font-size: 1rem;
+	letter-spacing: 0.02em;
+	z-index: 2;
+}
+.premium-table td {
+	padding: 14px 16px;
+	border-bottom: 1px solid #e5e7eb;
+	font-size: 0.98rem;
+	color: #22223b;
+}
+.premium-table tr {
+	transition: background 0.2s;
+}
+.premium-table tr:hover {
+	background: #f0f4ff;
+}
+.premium-table tr:last-child td {
+	border-bottom: none;
+}
+
+.glass-card {
+	background: rgba(255,255,255,0.85);
+	backdrop-filter: blur(12px);
+	box-shadow: 0 8px 32px rgba(59,130,246,0.08);
+	border-radius: 18px;
+	border: 1px solid #e0e7ef;
+}
+
+.premium-card {
+	background: linear-gradient(135deg, #fff 80%, #e0e7ef 100%);
+	box-shadow: 0 4px 16px rgba(59,130,246,0.08);
+	border-radius: 18px;
+	padding: 24px;
+	margin-bottom: 24px;
+	transition: box-shadow 0.2s, transform 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 18px;
+}
+.premium-card:hover {
+	box-shadow: 0 8px 32px rgba(59,130,246,0.16);
+	transform: translateY(-4px);
+}
+.premium-card .icon {
+	font-size: 2rem;
+	color: #6366f1;
+	background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+	border-radius: 50%;
+	padding: 12px;
+	box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+}
+.premium-card .value {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #22223b;
+}
+.premium-card .label {
+	font-size: 1rem;
+	color: #6366f1;
+}
+
+.premium-modal {
+	background: rgba(255,255,255,0.95);
+	border-radius: 20px;
+	box-shadow: 0 8px 32px rgba(59,130,246,0.12);
+	padding: 32px;
+	max-width: 480px;
+	margin: auto;
+	animation: fadeInModal 0.4s;
+}
+@keyframes fadeInModal {
+	from { opacity: 0; transform: scale(0.95); }
+	to { opacity: 1; transform: scale(1); }
+}
+.premium-modal .modal-title {
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: #6366f1;
+	margin-bottom: 18px;
+}
+.premium-modal .modal-btn {
+	background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+	color: #fff;
+	border-radius: 12px;
+	padding: 12px 24px;
+	font-weight: 600;
+	box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+	transition: box-shadow 0.2s, transform 0.2s;
+}
+.premium-modal .modal-btn:hover {
+	box-shadow: 0 8px 32px rgba(59,130,246,0.16);
+	transform: translateY(-2px);
+}
+
+.premium-form input, .premium-form select {
+	border: 1px solid #e0e7eb;
+	background: #fff;
+	color: #22223b;
+	border-radius: 12px;
+	padding: 12px;
+	font-size: 1rem;
+	margin-bottom: 16px;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+.premium-form input:focus, .premium-form select:focus {
+	border-color: #6366f1;
+	box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+	outline: none;
+}
+.premium-form label {
+	font-size: 1rem;
+	color: #6366f1;
+	margin-bottom: 8px;
+	display: block;
+}
+.premium-form .error {
+	color: #dc2626;
+	font-size: 0.95rem;
+	margin-top: -8px;
+	margin-bottom: 8px;
+}
+.premium-form .success {
+	color: #22c55e;
+	font-size: 0.95rem;
+	margin-top: -8px;
+	margin-bottom: 8px;
+}
+
+.premium-navbar {
+	background: rgba(255,255,255,0.85);
+	backdrop-filter: blur(8px);
+	box-shadow: 0 4px 16px rgba(59,130,246,0.08);
+	border-bottom: 1px solid #e0e7eb;
+	position: sticky;
+	top: 0;
+	z-index: 20;
+}
+.premium-navbar .nav-link {
+	color: #6366f1;
+	font-weight: 600;
+	padding: 12px 18px;
+	border-radius: 8px;
+	transition: background 0.2s, color 0.2s;
+}
+.premium-navbar .nav-link:hover, .premium-navbar .nav-link.active {
+	background: linear-gradient(135deg, #e0e7ef 0%, #fff 100%);
+	color: #3b82f6;
+}
+.premium-navbar .profile-avatar {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	border: 2px solid #6366f1;
+	box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+}
+.premium-navbar .dropdown {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 8px 32px rgba(59,130,246,0.12);
+	padding: 12px 0;
+	min-width: 160px;
+	animation: fadeInDropdown 0.3s;
+}
+@keyframes fadeInDropdown {
+	from { opacity: 0; transform: translateY(-10px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+.premium-navbar .dropdown-link {
+	color: #22223b;
+	padding: 12px 18px;
+	border-radius: 8px;
+	transition: background 0.2s;
+}
+.premium-navbar .dropdown-link:hover {
+	background: #e0e7ef;
+}
+
+.premium-btn {
+	background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+	color: #fff;
+	border-radius: 12px;
+	padding: 12px 24px;
+	font-weight: 600;
+	box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+	transition: box-shadow 0.2s, transform 0.2s;
+}
+.premium-btn:hover {
+	box-shadow: 0 8px 32px rgba(59,130,246,0.16);
+	transform: translateY(-2px);
+}
+
+.premium-scroll {
+	scrollbar-width: thin;
+	scrollbar-color: #6366f1 #e0e7ef;
+}
+.premium-scroll::-webkit-scrollbar {
+	height: 8px;
+	background: #e0e7ef;
+}
+.premium-scroll::-webkit-scrollbar-thumb {
+	background: #6366f1;
+	border-radius: 8px;
+}
+
+.animate__fadeInDown {
+	animation: fadeInDown 0.5s;
+}
+@keyframes fadeInDown {
+	from { opacity: 0; transform: translateY(-20px); }
+	to { opacity: 1; transform: translateY(0); }
+}

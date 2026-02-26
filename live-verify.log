@@ -1,0 +1,305 @@
+[dotenv@17.3.1] injecting env (3) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+Server running on port 5000
+Mongoose connected
+MongoDB connected: mongodb://127.0.0.1:27017/stockDB
+[MIGRATION] companies: updated 6, hashed 0, recovered 6, skipped 0 unsupported hash record(s)
+[MIGRATION] investors: updated 13, hashed 0, recovered 13, skipped 0 unsupported hash record(s)
+[AUTH] POST /api/auth/login
+login attempt: 23z277@psgtech.ac.in
+[AUTH] POST /api/auth/login
+login attempt: vishnu@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: 23z277@psgtech.ac.in
+[AUTH] POST /api/auth/login
+login attempt: company1@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company2@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company3@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company4@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company5@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company6@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company7@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company1771998373882@test.com
+[AUTH] POST /api/auth/login
+login attempt: company1771998924662@test.com
+[AUTH] POST /api/auth/login
+login attempt: company1771998940731@test.com
+[AUTH] POST /api/auth/login
+login attempt: embed1771998976688@test.com
+[AUTH] POST /api/auth/login
+login attempt: embednew1771999006825@test.com
+[AUTH] POST /api/auth/login
+login attempt: company1771999339774@test.com
+[AUTH] POST /api/auth/login
+login attempt: company1772001214096@test.com
+[AUTH] POST /api/auth/login
+login attempt: vishnu@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor_1771989566718@example.com
+[AUTH] POST /api/auth/login
+login attempt: investor1@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor2@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor3@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor4@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor5@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor6@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor7@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor8@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor9@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor10@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor11@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor12@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor13@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: investor1771998373631@test.com
+[AUTH] POST /api/auth/login
+login attempt: investor1771998924662@test.com
+[AUTH] POST /api/auth/login
+login attempt: investor1771998940731@test.com
+[AUTH] POST /api/auth/login
+login attempt: investor1771999339774@test.com
+[AUTH] POST /api/auth/login
+login attempt: manual.investor.1772001206371@test.com
+[AUTH] POST /api/auth/login
+login attempt: investor1772001214096@test.com
+[AUTH] POST /api/auth/signup/investor
+signupInvestor payload keys: [
+  'fullName',
+  'email',
+  'password',
+  'confirmPassword',
+  'phone',
+  'investorType',
+  'investmentRange',
+  'preferredIndustry',
+  'experienceLevel'
+]
+signupInvestor success: 699e98ca833cec9d90f4774f
+[AUTH] POST /api/auth/signup/company
+signupCompany payload keys: [
+  'companyName',
+  'email',
+  'password',
+  'confirmPassword',
+  'registrationNumber',
+  'industry',
+  'foundedYear',
+  'fundingNeeded',
+  'equityOffered'
+]
+signupCompany success: 699e98ca833cec9d90f47754
+[AUTH] POST /api/auth/login
+login attempt: company1772001481904@test.com
+createStock payload keys: [
+  'stockSymbol',
+  'companyName',
+  'sector',
+  'isActive',
+  'foundedYear',
+  'currentPrice',
+  'currentVolume',
+  'fundamentals',
+  'tags',
+  'historicalPrices'
+]
+createStock success: T481904
+[AUTH] POST /api/auth/login
+login attempt: manual.investor.1772001206371@test.com
+[AUTH] POST /api/auth/login
+login attempt: investor1@gmail.com
+[AUTH] POST /api/auth/login
+login attempt: company1@gmail.com
+updateStock target: STK23 payload keys: [
+  'stockSymbol',
+  'sector',
+  'currency',
+  'currentPrice',
+  'currentVolume',
+  'isActive',
+  'tags',
+  'listedExchanges',
+  'fundamentals',
+  'technicalIndicators',
+  'priceRange',
+  'majorShareholders',
+  'dividendHistory',
+  'historicalPrices',
+  'ipoDetails'
+]
+updateStock error: VersionError: No matching document found for id "699e866e95e95e5b195c43cb" version 0 modifiedPaths "ipoDetails, historicalPrices, lastUpdated"
+    at generateVersionError (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:567:10)
+    at model.save (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:628:28)
+    at exports.updateStock (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\controllers\stockController.js:706:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  version: 0,
+  modifiedPaths: [ 'ipoDetails', 'historicalPrices', 'lastUpdated' ]
+}
+updateStock target: STK23 payload keys: [
+  'stockSymbol',
+  'sector',
+  'currency',
+  'currentPrice',
+  'currentVolume',
+  'isActive',
+  'tags',
+  'listedExchanges',
+  'fundamentals',
+  'technicalIndicators',
+  'priceRange',
+  'majorShareholders',
+  'dividendHistory',
+  'historicalPrices',
+  'ipoDetails'
+]
+updateStock error: VersionError: No matching document found for id "699e866e95e95e5b195c43cb" version 0 modifiedPaths "ipoDetails, historicalPrices, lastUpdated"
+    at generateVersionError (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:567:10)
+    at model.save (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:628:28)
+    at exports.updateStock (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\controllers\stockController.js:706:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  version: 0,
+  modifiedPaths: [ 'ipoDetails', 'historicalPrices', 'lastUpdated' ]
+}
+updateStock target: STK23 payload keys: [
+  'stockSymbol',
+  'sector',
+  'currency',
+  'currentPrice',
+  'currentVolume',
+  'isActive',
+  'tags',
+  'listedExchanges',
+  'fundamentals',
+  'technicalIndicators',
+  'priceRange',
+  'majorShareholders',
+  'dividendHistory',
+  'historicalPrices',
+  'ipoDetails'
+]
+updateStock error: VersionError: No matching document found for id "699e866e95e95e5b195c43cb" version 0 modifiedPaths "ipoDetails, historicalPrices, lastUpdated"
+    at generateVersionError (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:567:10)
+    at model.save (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:628:28)
+    at exports.updateStock (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\controllers\stockController.js:706:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  version: 0,
+  modifiedPaths: [ 'ipoDetails', 'historicalPrices', 'lastUpdated' ]
+}
+updateStock target: STK23 payload keys: [
+  'stockSymbol',
+  'sector',
+  'currency',
+  'currentPrice',
+  'currentVolume',
+  'isActive',
+  'tags',
+  'listedExchanges',
+  'fundamentals',
+  'technicalIndicators',
+  'priceRange',
+  'majorShareholders',
+  'dividendHistory',
+  'historicalPrices',
+  'ipoDetails'
+]
+updateStock error: VersionError: No matching document found for id "699e866e95e95e5b195c43cb" version 0 modifiedPaths "ipoDetails, historicalPrices, lastUpdated"
+    at generateVersionError (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:567:10)
+    at model.save (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:628:28)
+    at exports.updateStock (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\controllers\stockController.js:706:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  version: 0,
+  modifiedPaths: [ 'ipoDetails', 'historicalPrices', 'lastUpdated' ]
+}
+updateStock target: STK23 payload keys: [
+  'stockSymbol',
+  'sector',
+  'currency',
+  'currentPrice',
+  'currentVolume',
+  'isActive',
+  'tags',
+  'listedExchanges',
+  'fundamentals',
+  'technicalIndicators',
+  'priceRange',
+  'majorShareholders',
+  'dividendHistory',
+  'historicalPrices',
+  'ipoDetails'
+]
+updateStock error: VersionError: No matching document found for id "699e866e95e95e5b195c43cb" version 0 modifiedPaths "ipoDetails, historicalPrices, lastUpdated"
+    at generateVersionError (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:567:10)
+    at model.save (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:628:28)
+    at exports.updateStock (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\controllers\stockController.js:706:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  version: 0,
+  modifiedPaths: [ 'ipoDetails', 'historicalPrices', 'lastUpdated' ]
+}
+updateStock target: STK23 payload keys: [
+  'stockSymbol',
+  'sector',
+  'currency',
+  'currentPrice',
+  'currentVolume',
+  'isActive',
+  'tags',
+  'listedExchanges',
+  'fundamentals',
+  'technicalIndicators',
+  'priceRange',
+  'majorShareholders',
+  'dividendHistory',
+  'historicalPrices',
+  'ipoDetails'
+]
+updateStock error: VersionError: No matching document found for id "699e866e95e95e5b195c43cb" version 0 modifiedPaths "ipoDetails, historicalPrices, lastUpdated"
+    at generateVersionError (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:567:10)
+    at model.save (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:628:28)
+    at exports.updateStock (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\controllers\stockController.js:706:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  version: 0,
+  modifiedPaths: [ 'ipoDetails', 'historicalPrices', 'lastUpdated' ]
+}
+updateStock target: STK23 payload keys: [
+  'stockSymbol',
+  'sector',
+  'currency',
+  'currentPrice',
+  'currentVolume',
+  'isActive',
+  'tags',
+  'listedExchanges',
+  'fundamentals',
+  'technicalIndicators',
+  'priceRange',
+  'majorShareholders',
+  'dividendHistory',
+  'historicalPrices',
+  'ipoDetails'
+]
+updateStock error: VersionError: No matching document found for id "699e866e95e95e5b195c43cb" version 0 modifiedPaths "ipoDetails, historicalPrices, lastUpdated"
+    at generateVersionError (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:567:10)
+    at model.save (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\node_modules\mongoose\lib\model.js:628:28)
+    at exports.updateStock (C:\Users\sakth\OneDrive\Desktop\BigData\stock_analysis\controllers\stockController.js:706:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  version: 0,
+  modifiedPaths: [ 'ipoDetails', 'historicalPrices', 'lastUpdated' ]
+}
+^C

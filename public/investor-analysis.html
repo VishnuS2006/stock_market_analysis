@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Investor Analysis | StockFund</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Manrope", "sans-serif"],
+            display: ["Outfit", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .glow-btn {
+      background: #4f46e5;
+      color: #fff;
+      transition: all 200ms ease-in-out;
+    }
+
+    .glow-btn:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+    }
+
+    .soft-btn {
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #374151;
+      transition: all 200ms ease-in-out;
+    }
+
+    .soft-btn:hover {
+      background: #f9fafb;
+    }
+
+    .input {
+      width: 100%;
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      padding: 0.55rem 0.8rem;
+      font-size: 0.875rem;
+      color: #111827;
+      transition: all 200ms ease-in-out;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .toast {
+      border-radius: 0.75rem;
+      border: 1px solid transparent;
+      padding: 0.72rem 0.92rem;
+      font-size: 0.84rem;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: transform 160ms ease, opacity 160ms ease;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.info {
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .toast.error {
+      border-color: #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
+  <header class="sticky top-0 z-20 border-b border-gray-200 bg-white shadow-sm">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Investor Terminal</p>
+        <h1 class="font-display text-2xl font-semibold text-gray-900">Stock Analysis Center</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/investor-dashboard" class="soft-btn rounded-lg px-4 py-2 text-sm font-medium">Market View</a>
+        <button id="logoutBtn" class="glow-btn rounded-lg px-4 py-2 text-sm font-medium">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+    <section class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+        <div class="md:col-span-2">
+          <label class="mb-2 block text-sm font-medium text-gray-700">Select Stock</label>
+          <select id="stockSelect" class="input"></select>
+        </div>
+        <div class="flex items-end">
+          <button id="refreshBtn" class="glow-btn w-full rounded-lg px-4 py-2 text-sm font-medium">Refresh Analysis</button>
+        </div>
+      </div>
+      <p id="analysisStatus" class="mt-3 text-sm text-gray-500">Loading stocks...</p>
+    </section>
+
+    <section class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <h2 id="stockTitle" class="text-2xl font-semibold text-gray-900">-</h2>
+        <span id="activeStatusChip" class="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600">-</span>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <p class="text-xs text-gray-500">Current Price</p>
+          <p id="metricPrice" class="mt-1 text-2xl font-semibold text-gray-900">$0</p>
+        </article>
+        <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <p class="text-xs text-gray-500">Market Cap</p>
+          <p id="metricMarketCap" class="mt-1 text-2xl font-semibold text-gray-900">$0</p>
+        </article>
+        <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <p class="text-xs text-gray-500">P/E Ratio</p>
+          <p id="metricPeRatio" class="mt-1 text-2xl font-semibold text-gray-900">0</p>
+        </article>
+        <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+          <p class="text-xs text-gray-500">RSI</p>
+          <p id="metricRsi" class="mt-1 text-2xl font-semibold text-gray-900">0</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm xl:col-span-2">
+        <h3 class="mb-3 text-lg font-semibold text-gray-900">Price and Moving Averages</h3>
+        <div class="h-72"><canvas id="priceChart"></canvas></div>
+      </article>
+      <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <h3 class="mb-3 text-lg font-semibold text-gray-900">RSI Trend</h3>
+        <div class="h-72"><canvas id="rsiChart"></canvas></div>
+      </article>
+    </section>
+
+    <section class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <h3 class="mb-3 text-lg font-semibold text-gray-900">Volume Trend</h3>
+        <div class="h-72"><canvas id="volumeChart"></canvas></div>
+      </article>
+      <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <h3 class="mb-3 text-lg font-semibold text-gray-900">Insights</h3>
+        <div id="analysisInsights" class="space-y-2 text-sm text-gray-600"></div>
+      </article>
+    </section>
+  </main>
+
+  <div id="toastContainer" class="fixed right-4 top-4 z-[60] flex w-full max-w-sm flex-col gap-3"></div>
+
+  <script src="/investor-analysis.js"></script>
+</body>
+</html>

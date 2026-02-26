@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up - StockFund</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Manrope", "sans-serif"],
+            display: ["Outfit", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .tab-btn {
+      transition: all 200ms ease-in-out;
+    }
+
+    .tab-btn.active {
+      background: #eef2ff;
+      color: #4f46e5;
+      border-color: #c7d2fe;
+      font-weight: 600;
+    }
+
+    .tab-btn.inactive {
+      background: #fff;
+      color: #6b7280;
+      border-color: #e5e7eb;
+    }
+
+    .strength-bar {
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 9999px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .strength-bar-fill {
+      height: 100%;
+      transition: width 200ms ease-in-out;
+      border-radius: 9999px;
+    }
+
+    .loader {
+      border: 4px solid rgba(226, 232, 240, 1);
+      border-top: 4px solid rgba(79, 70, 229, 1);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed;
+      right: 1.25rem;
+      top: 1.25rem;
+      z-index: 100;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .toast.success {
+      background: #ecfdf3;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .toast.error {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
+  <div class="grid min-h-screen grid-cols-1 lg:grid-cols-2">
+    <section class="hidden border-r border-gray-200 bg-white lg:flex lg:flex-col lg:justify-between lg:p-10">
+      <div>
+        <a href="/" class="inline-flex items-center gap-2 text-xl font-semibold text-gray-900">
+          <span class="h-8 w-8 rounded-lg bg-indigo-600"></span>
+          StockFund
+        </a>
+      </div>
+      <div class="max-w-md space-y-5">
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-600">Get Started</p>
+        <h1 class="font-display text-4xl font-semibold leading-tight text-gray-900">Create your account and access the full platform.</h1>
+        <p class="text-base text-gray-500">Register as a company to manage stock listings, or as an investor to explore market opportunities and analytics.</p>
+      </div>
+      <div class="text-sm text-gray-500">Trusted onboarding flow with validated fields and secure credentials.</div>
+    </section>
+
+    <section class="flex items-center justify-center p-6">
+      <div class="w-full max-w-lg rounded-xl border border-gray-200 bg-white p-6 shadow-md">
+        <div class="mb-6 text-center">
+          <h2 class="font-display text-2xl font-semibold text-gray-900">Create account</h2>
+          <p class="mt-2 text-sm text-gray-500">Choose your role and complete registration</p>
+        </div>
+
+        <div class="mb-6 grid grid-cols-2 gap-3">
+          <button id="companyTab" class="tab-btn active rounded-lg border px-4 py-2 text-sm">Company</button>
+          <button id="investorTab" class="tab-btn inactive rounded-lg border px-4 py-2 text-sm">Investor</button>
+        </div>
+
+        <div id="error" class="mb-4 hidden rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"></div>
+
+        <form id="companyForm" class="space-y-4">
+          <input type="text" id="companyName" placeholder="Company Name" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+          <input type="email" id="companyEmail" placeholder="Email" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+
+          <div class="relative">
+            <input type="password" id="companyPassword" placeholder="Password" class="w-full rounded-lg border border-gray-300 px-4 py-2 pr-12 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700" onclick="togglePassword('companyPassword')">Show</button>
+            <div class="strength-bar"><div id="companyStrength" class="strength-bar-fill w-0 bg-red-500"></div></div>
+          </div>
+
+          <div class="relative">
+            <input type="password" id="companyConfirm" placeholder="Confirm Password" class="w-full rounded-lg border border-gray-300 px-4 py-2 pr-12 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700" onclick="togglePassword('companyConfirm')">Show</button>
+          </div>
+
+          <input type="text" id="registrationNumber" placeholder="Registration Number" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+          <input type="text" id="industry" placeholder="Industry (e.g., Technology)" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+          <input type="number" id="foundedYear" placeholder="Founded Year" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+          <input type="text" id="fundingNeeded" placeholder="Funding Needed (e.g., $500K-$1M)" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+          <input type="number" id="equityOffered" placeholder="Equity Offered (%)" step="0.1" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+
+          <button type="submit" class="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-md">
+            Sign Up as Company
+          </button>
+        </form>
+
+        <form id="investorForm" class="hidden space-y-4">
+          <input type="text" id="fullName" placeholder="Full Name" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+          <input type="email" id="investorEmail" placeholder="Email" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+
+          <div class="relative">
+            <input type="password" id="investorPassword" placeholder="Password" class="w-full rounded-lg border border-gray-300 px-4 py-2 pr-12 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700" onclick="togglePassword('investorPassword')">Show</button>
+            <div class="strength-bar"><div id="investorStrength" class="strength-bar-fill w-0 bg-red-500"></div></div>
+          </div>
+
+          <div class="relative">
+            <input type="password" id="investorConfirm" placeholder="Confirm Password" class="w-full rounded-lg border border-gray-300 px-4 py-2 pr-12 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700" onclick="togglePassword('investorConfirm')">Show</button>
+          </div>
+
+          <input type="tel" id="phone" placeholder="Phone Number" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+
+          <select id="investorType" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required>
+            <option value="">Select Investor Type</option>
+            <option value="Angel">Angel Investor</option>
+            <option value="VC">Venture Capital</option>
+            <option value="Individual">Individual Investor</option>
+          </select>
+
+          <input type="text" id="preferredIndustry" placeholder="Preferred Industry" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required />
+
+          <select id="experienceLevel" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm transition-all duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20" required>
+            <option value="">Select Experience Level</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Expert">Expert</option>
+          </select>
+
+          <button type="submit" class="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-md">
+            Sign Up as Investor
+          </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-500">
+          Already have an account?
+          <a href="/login" class="font-medium text-indigo-600 transition-all duration-200 hover:text-indigo-700">Sign in</a>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <script src="/auth.js"></script>
+  <script>
+    const companyTabButton = document.getElementById("companyTab");
+    const investorTabButton = document.getElementById("investorTab");
+    const companyFormPanel = document.getElementById("companyForm");
+    const investorFormPanel = document.getElementById("investorForm");
+
+    if (companyTabButton && investorTabButton && companyFormPanel && investorFormPanel) {
+      companyTabButton.addEventListener("click", () => {
+        companyTabButton.classList.add("active");
+        companyTabButton.classList.remove("inactive");
+        investorTabButton.classList.remove("active");
+        investorTabButton.classList.add("inactive");
+        companyFormPanel.classList.remove("hidden");
+        investorFormPanel.classList.add("hidden");
+      });
+
+      investorTabButton.addEventListener("click", () => {
+        investorTabButton.classList.add("active");
+        investorTabButton.classList.remove("inactive");
+        companyTabButton.classList.remove("active");
+        companyTabButton.classList.add("inactive");
+        investorFormPanel.classList.remove("hidden");
+        companyFormPanel.classList.add("hidden");
+      });
+    }
+
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      field.type = field.type === "password" ? "text" : "password";
+    }
+
+    function getPasswordStrength(pwd) {
+      let score = 0;
+      if (pwd.length >= 6) score++;
+      if (pwd.length >= 10) score++;
+      if (/[A-Z]/.test(pwd)) score++;
+      if (/[0-9]/.test(pwd)) score++;
+      if (/[^A-Za-z0-9]/.test(pwd)) score++;
+      return score;
+    }
+
+    document.getElementById("companyPassword").addEventListener("input", (e) => {
+      const strength = getPasswordStrength(e.target.value);
+      const bar = document.getElementById("companyStrength");
+      const colors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-lime-500", "bg-green-500"];
+      bar.className = `strength-bar-fill ${colors[strength - 1] || "bg-red-500"}`;
+      bar.style.width = `${(strength / 5) * 100}%`;
+    });
+
+    document.getElementById("investorPassword").addEventListener("input", (e) => {
+      const strength = getPasswordStrength(e.target.value);
+      const bar = document.getElementById("investorStrength");
+      const colors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-lime-500", "bg-green-500"];
+      bar.className = `strength-bar-fill ${colors[strength - 1] || "bg-red-500"}`;
+      bar.style.width = `${(strength / 5) * 100}%`;
+    });
+  </script>
+</body>
+</html>
