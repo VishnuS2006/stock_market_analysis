@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Investor Dashboard | StockStart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/css/dashboard-white.css" />
+</head>
+<body class="bg-white text-gray-900 min-h-screen">
+  <nav class="sticky top-0 z-20 bg-white/80 backdrop-blur-lg shadow-lg transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <a href="#" class="text-2xl font-extrabold text-indigo-700 tracking-tight">StockStart</a>
+        </div>
+        <div class="hidden md:flex space-x-6">
+          <a href="#dashboard" class="relative group text-gray-700 font-medium hover:text-indigo-700 transition">
+            Dashboard
+            <span class="absolute left-0 bottom-0 w-full h-0.5 bg-indigo-700 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </a>
+          <a href="#analytics" class="relative group text-gray-700 font-medium hover:text-indigo-700 transition">
+            Analytics
+            <span class="absolute left-0 bottom-0 w-full h-0.5 bg-indigo-700 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </a>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="w-9 h-9 rounded-full border-2 border-indigo-500 shadow-sm cursor-pointer" id="profileAvatar">
+            <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 transition-all duration-300 origin-top-right">
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 transition">Profile</a>
+              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 transition">Settings</a>
+              <button id="logoutBtn" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition">Logout</button>
+            </div>
+          </div>
+          <button id="menuButton" class="md:hidden text-gray-700 focus:outline-none">
+            <i class="fas fa-bars fa-lg"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden bg-white rounded-b-lg shadow-lg">
+      <a href="#dashboard" class="block px-4 py-2 hover:bg-indigo-50 transition">Dashboard</a>
+      <a href="#analytics" class="block px-4 py-2 hover:bg-indigo-50 transition">Analytics</a>
+      <button id="logoutBtnMobile" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition">Logout</button>
+    </div>
+  </nav>
+  <main class="max-w-5xl mx-auto py-8 px-2 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold mb-6">All Stocks</h1>
+    <div id="dashboardError" class="hidden text-red-600 mb-4"></div>
+    <div id="loading" class="hidden text-center py-8">Loading...</div>
+    <div class="mb-6 flex gap-4">
+      <input id="searchInput" class="premium-form p-2 border rounded w-64" placeholder="Search by symbol..." />
+      <select id="sectorFilter" class="premium-form p-2 border rounded">
+        <option value="">All Sectors</option>
+      </select>
+      <select id="sortSelect" class="premium-form p-2 border rounded">
+        <option value="">Sort By</option>
+        <option value="price">Price</option>
+        <option value="marketCap">Market Cap</option>
+        <option value="volume">Volume</option>
+      </select>
+    </div>
+    <div id="stockTableWrap" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 premium-table"></div>
+    <section class="mt-12">
+      <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Market Analytics</h2>
+      <div class="glass-card rounded-xl shadow-lg p-6 premium-scroll" style="overflow-x:auto;">
+        <canvas id="analyticsChart" height="120" style="max-width:100%;"></canvas>
+      </div>
+    </section>
+    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+      <div class="premium-modal animate__fadeInDown">
+        <h2 id="modalTitle" class="modal-title"></h2>
+        <form id="stockForm" class="premium-form space-y-4"></form>
+        <div class="flex gap-4 mt-6">
+          <button id="saveStockBtn" class="modal-btn">Save</button>
+          <button id="cancelModalBtn" class="modal-btn bg-gray-200 text-indigo-700">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="/js/investor-dashboard.js"></script>
+</body>
+</html>

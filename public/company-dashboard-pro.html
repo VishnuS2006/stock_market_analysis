@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Dashboard - StockFund</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Manrope", "sans-serif"],
+              display: ["Outfit", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --bg-a: #f6fbff;
+        --bg-b: #ecf9f4;
+        --line: #d6e4f1;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --brand: #0f766e;
+        --brand-2: #0ea5e9;
+      }
+
+      body {
+        background:
+          radial-gradient(circle at 10% -20%, rgba(14, 165, 233, 0.22), transparent 42%),
+          radial-gradient(circle at 88% -18%, rgba(16, 185, 129, 0.22), transparent 44%),
+          linear-gradient(180deg, var(--bg-a), var(--bg-b));
+        color: var(--ink);
+      }
+
+      .top-shell {
+        border-bottom: 1px solid rgba(148, 163, 184, 0.28);
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(8px);
+      }
+
+      .taskbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+      }
+
+      .sidebar-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(148, 163, 184, 0.33);
+        background: rgba(248, 250, 252, 0.88);
+        padding: 0.52rem 0.92rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #334155;
+        transition: all 170ms ease;
+      }
+
+      .sidebar-item:hover {
+        border-color: rgba(14, 165, 233, 0.45);
+        color: #0f172a;
+        transform: translateY(-1px);
+      }
+
+      .sidebar-item.active {
+        border-color: rgba(13, 148, 136, 0.55);
+        background: linear-gradient(135deg, rgba(15, 118, 110, 0.2), rgba(14, 165, 233, 0.2));
+        color: #0f172a;
+      }
+
+      .top-action {
+        border-radius: 0.75rem;
+        border: 1px solid transparent;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        color: #ecfeff;
+        padding: 0.52rem 0.88rem;
+        font-size: 0.86rem;
+        font-weight: 600;
+        transition: all 180ms ease;
+      }
+
+      .top-action:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 24px rgba(14, 116, 144, 0.26);
+      }
+
+      .surface-card {
+        border-radius: 1rem;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+      }
+
+      .metric-card {
+        border-radius: 1rem;
+        border: 1px solid var(--line);
+        padding: 1.2rem 1.3rem;
+        transition: transform 180ms ease, box-shadow 180ms ease;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 26px rgba(15, 23, 42, 0.1);
+      }
+
+      .metric-card.total {
+        background: linear-gradient(140deg, rgba(15, 118, 110, 0.18), rgba(15, 118, 110, 0.03));
+      }
+
+      .metric-card.cap {
+        background: linear-gradient(140deg, rgba(14, 165, 233, 0.2), rgba(14, 165, 233, 0.04));
+      }
+
+      .metric-card.price {
+        background: linear-gradient(140deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.04));
+      }
+
+      .metric-title {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+
+      .metric-value {
+        margin-top: 0.38rem;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+      }
+
+      .stock-board {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        border: 1px solid rgba(15, 23, 42, 0.2);
+        background: linear-gradient(155deg, #081120 0%, #12213f 52%, #0f3144 100%);
+        padding: 1.3rem;
+      }
+
+      .stock-board::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(0deg, transparent 24%, rgba(148, 163, 184, 0.1) 25%, transparent 26%),
+          linear-gradient(90deg, transparent 24%, rgba(148, 163, 184, 0.1) 25%, transparent 26%);
+        background-size: 24px 24px;
+        opacity: 0.35;
+      }
+
+      .stock-board > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .stock-board-title {
+        color: #f8fafc;
+      }
+
+      .stock-board-subtitle {
+        color: rgba(186, 230, 253, 0.88);
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .stock-empty {
+        border-radius: 0.8rem;
+        border: 1px dashed rgba(148, 163, 184, 0.44);
+        background: rgba(15, 23, 42, 0.35);
+        color: #cbd5e1;
+      }
+
+      .stock-row-card {
+        border-radius: 0.95rem;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: linear-gradient(150deg, rgba(15, 23, 42, 0.92), rgba(30, 41, 59, 0.7));
+        padding: 1rem;
+        color: #e2e8f0;
+        transition: all 180ms ease;
+      }
+
+      .stock-row-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(56, 189, 248, 0.55);
+        box-shadow: 0 18px 30px rgba(2, 6, 23, 0.32);
+      }
+
+      .stock-symbol {
+        font-family: "Outfit", sans-serif;
+        font-size: 1.22rem;
+        font-weight: 600;
+        color: #f8fafc;
+      }
+
+      .stock-chip {
+        border-radius: 9999px;
+        padding: 0.15rem 0.52rem;
+        font-size: 0.67rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .stock-chip.currency {
+        border: 1px solid rgba(125, 211, 252, 0.46);
+        background: rgba(14, 116, 144, 0.24);
+        color: #e0f2fe;
+      }
+
+      .stock-chip.active {
+        border: 1px solid rgba(74, 222, 128, 0.45);
+        background: rgba(20, 83, 45, 0.3);
+        color: #bbf7d0;
+      }
+
+      .stock-chip.inactive {
+        border: 1px solid rgba(248, 113, 113, 0.45);
+        background: rgba(127, 29, 29, 0.3);
+        color: #fecaca;
+      }
+
+      .stock-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+      }
+
+      .stock-metric {
+        border-radius: 0.7rem;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        background: rgba(15, 23, 42, 0.42);
+        padding: 0.48rem 0.6rem;
+      }
+
+      .stock-metric-label {
+        font-size: 0.62rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #94a3b8;
+      }
+
+      .stock-metric-value {
+        margin-top: 0.2rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .stock-actions {
+        display: flex;
+        gap: 0.48rem;
+        justify-content: flex-end;
+      }
+
+      .btn-edit {
+        border: 1px solid rgba(56, 189, 248, 0.45);
+        background: rgba(14, 116, 144, 0.3);
+        color: #e0f2fe;
+      }
+
+      .btn-delete {
+        border: 1px solid rgba(248, 113, 113, 0.45);
+        background: rgba(127, 29, 29, 0.33);
+        color: #fee2e2;
+      }
+
+      .stock-btn {
+        border-radius: 0.6rem;
+        padding: 0.33rem 0.72rem;
+        font-size: 0.74rem;
+        font-weight: 600;
+        transition: all 150ms ease;
+      }
+
+      .stock-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .profile-hero {
+        border-radius: 1rem;
+        border: 1px solid rgba(14, 165, 233, 0.28);
+        background: linear-gradient(140deg, rgba(14, 165, 233, 0.16), rgba(15, 118, 110, 0.14));
+        padding: 1.2rem;
+      }
+
+      .profile-avatar {
+        display: inline-flex;
+        height: 3rem;
+        width: 3rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.95rem;
+        background: linear-gradient(135deg, #0f766e, #0ea5e9);
+        color: #ecfeff;
+        font-family: "Outfit", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .profile-chip {
+        border-radius: 9999px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(255, 255, 255, 0.7);
+        padding: 0.24rem 0.62rem;
+        font-size: 0.74rem;
+        color: #334155;
+      }
+
+      .profile-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+      }
+
+      .profile-kpi {
+        border-radius: 0.72rem;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(255, 255, 255, 0.72);
+        padding: 0.62rem 0.7rem;
+      }
+
+      .profile-kpi-label {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #64748b;
+      }
+
+      .profile-kpi-value {
+        margin-top: 0.18rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      #addStockForm input:not([type="checkbox"]),
+      #addStockForm select,
+      #addStockForm textarea,
+      #profileForm input {
+        width: 100%;
+        border-radius: 0.65rem;
+        border: 1px solid #cdddea;
+        background: #fff;
+        padding: 0.56rem 0.82rem;
+        font-size: 0.88rem;
+        color: #0f172a;
+        transition: border-color 150ms ease, box-shadow 150ms ease;
+      }
+
+      #addStockForm input:focus,
+      #addStockForm select:focus,
+      #addStockForm textarea:focus,
+      #profileForm input:focus {
+        outline: none;
+        border-color: #14b8a6;
+        box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18);
+      }
+
+      .primary-btn {
+        border-radius: 0.72rem;
+        border: 1px solid transparent;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        color: #ecfeff;
+        padding: 0.58rem 0.94rem;
+        font-size: 0.87rem;
+        font-weight: 600;
+        transition: all 170ms ease;
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 22px rgba(14, 116, 144, 0.24);
+      }
+
+      .secondary-btn {
+        border-radius: 0.72rem;
+        border: 1px solid #cbd5e1;
+        background: #fff;
+        color: #334155;
+        padding: 0.58rem 0.94rem;
+        font-size: 0.87rem;
+        font-weight: 600;
+      }
+
+      .toast {
+        position: fixed;
+        right: 1.25rem;
+        top: 1.25rem;
+        z-index: 100;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: 1px solid transparent;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      }
+
+      .toast.success {
+        background: #ecfdf3;
+        color: #166534;
+        border-color: #bbf7d0;
+      }
+
+      .toast.error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border-color: #fecaca;
+      }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <header class="top-shell sticky top-0 z-30">
+      <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p class="text-xs uppercase tracking-[0.18em] text-slate-500">StockFund Company Terminal</p>
+            <h1 class="font-display text-2xl font-semibold text-slate-900">Company Control Center</h1>
+            <p id="companyNameDisplay" class="mt-1 text-sm text-slate-600">Company</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <p class="hidden text-sm text-slate-500 lg:block">Manage stocks, profile, and listing quality</p>
+            <button id="logoutBtn" class="top-action">Logout</button>
+          </div>
+        </div>
+        <nav class="taskbar mt-4">
+          <button type="button" class="sidebar-item active" data-tab="stocks">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-200/80 text-[0.65rem] font-semibold">MS</span>
+            My Stocks
+          </button>
+          <button type="button" class="sidebar-item" data-tab="add-stock">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-200/80 text-[0.65rem] font-semibold">AS</span>
+            Add Stock
+          </button>
+          <button type="button" class="sidebar-item" data-tab="profile">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-200/80 text-[0.65rem] font-semibold">PR</span>
+            Profile
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+      <section id="stocks" class="tab-content space-y-6">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <article class="metric-card total">
+            <p class="metric-title">Total Stocks</p>
+            <h3 id="totalStocks" class="metric-value">0</h3>
+          </article>
+          <article class="metric-card cap">
+            <p class="metric-title">Total Market Cap</p>
+            <h3 id="totalMarketCap" class="metric-value">$0</h3>
+          </article>
+          <article class="metric-card price">
+            <p class="metric-title">Average Price</p>
+            <h3 id="avgPrice" class="metric-value">$0</h3>
+          </article>
+        </div>
+
+        <article class="stock-board">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p class="stock-board-subtitle">Live Listings</p>
+              <h2 class="stock-board-title text-2xl font-semibold">Your Listed Stocks</h2>
+            </div>
+          </div>
+          <div id="stocksContainer" class="space-y-4"></div>
+          <p id="noStocksMsg" class="stock-empty px-4 py-10 text-center text-sm">
+            No stocks yet. Add your first stock.
+          </p>
+        </article>
+      </section>
+
+      <section id="add-stock" class="tab-content hidden">
+        <article class="surface-card p-6">
+          <div class="mb-6">
+            <h2 id="stockFormTitle" class="text-2xl font-semibold text-slate-900">Add New Stock</h2>
+            <p id="stockFormSubTitle" class="mt-1 text-sm text-slate-500">Create a stock listing with full fundamentals and technical indicators.</p>
+          </div>
+
+          <form id="addStockForm" class="space-y-6">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Stock Symbol *</label>
+                <input type="text" id="stockSymbol" placeholder="AAPL" class="uppercase" required />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Sector *</label>
+                <input type="text" id="sector" placeholder="Technology" required />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Currency *</label>
+                <select id="currency">
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="INR">INR</option>
+                  <option value="GBP">GBP</option>
+                  <option value="JPY">JPY</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Current Price *</label>
+                <input type="number" id="currentPrice" step="0.01" min="0" required />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Volume *</label>
+                <input type="number" id="currentVolume" min="0" required />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Market Cap *</label>
+                <input type="number" id="marketCap" min="0" required />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">P/E Ratio</label>
+                <input type="number" id="peRatio" step="0.01" min="0" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">EPS</label>
+                <input type="number" id="eps" step="0.01" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">ROE (%)</label>
+                <input type="number" id="roe" step="0.01" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">RSI (0-100)</label>
+                <input type="number" id="rsi" min="0" max="100" step="0.1" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">MA 50</label>
+                <input type="number" id="movingAverage50" min="0" step="0.01" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">MA 200</label>
+                <input type="number" id="movingAverage200" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Day High</label>
+                <input type="number" id="dayHigh" min="0" step="0.01" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Day Low</label>
+                <input type="number" id="dayLow" min="0" step="0.01" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">52W High</label>
+                <input type="number" id="fiftyTwoWeekHigh" min="0" step="0.01" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">52W Low</label>
+                <input type="number" id="fiftyTwoWeekLow" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Tags (comma-separated)</label>
+                <input type="text" id="tags" placeholder="growth, dividend" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Listed Exchanges (comma-separated)</label>
+                <input type="text" id="listedExchanges" placeholder="NASDAQ, NYSE" class="uppercase" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Major Shareholders</label>
+                <textarea id="majorShareholdersInput" rows="3" placeholder="BlackRock:8.7, Vanguard:7.9"></textarea>
+                <p class="mt-1 text-xs text-slate-500">Format: Name:Percent, Name:Percent</p>
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Dividend History</label>
+                <textarea id="dividendHistoryInput" rows="3" placeholder="2024:1.8, 2025:2.1"></textarea>
+                <p class="mt-1 text-xs text-slate-500">Format: Year:DividendPerShare</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700">Historical Prices (Embedded Array)</label>
+              <textarea id="historicalPricesInput" rows="3" placeholder="2025-01-01:120.5:1000000, 2025-01-02:121.4:980000"></textarea>
+              <p class="mt-1 text-xs text-slate-500">Format: YYYY-MM-DD:Price:Volume (comma-separated)</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">IPO Issue Price</label>
+                <input type="number" id="ipoIssuePrice" min="0" step="0.01" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">IPO Total Shares</label>
+                <input type="number" id="ipoTotalShares" min="0" step="1" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">IPO Open Date</label>
+                <input type="date" id="ipoOpenDate" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">IPO Close Date</label>
+                <input type="date" id="ipoCloseDate" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Listing Date</label>
+                <input type="date" id="ipoListingDate" />
+              </div>
+            </div>
+
+            <label class="inline-flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700">
+              <input type="checkbox" id="isActive" class="h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500" checked />
+              Stock is active and visible to investors
+            </label>
+
+            <div class="flex flex-wrap gap-3">
+              <button id="stockSubmitBtn" type="submit" class="primary-btn">
+                Add Stock
+              </button>
+              <button id="cancelEditBtn" type="button" class="secondary-btn hidden">
+                Cancel Edit
+              </button>
+            </div>
+          </form>
+        </article>
+      </section>
+
+      <section id="profile" class="tab-content hidden">
+        <div class="grid grid-cols-1 gap-5 xl:grid-cols-5">
+          <article class="profile-hero xl:col-span-2">
+            <div class="profile-avatar" id="profileAvatar">CO</div>
+            <h2 id="profileHeroName" class="mt-3 text-2xl font-semibold text-slate-900">Company</h2>
+            <p id="profileHeroIndustry" class="mt-1 text-sm text-slate-600">Industry</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span id="profileIndustryBadge" class="profile-chip">Industry</span>
+              <span id="profileFoundedBadge" class="profile-chip">Founded: --</span>
+            </div>
+            <div class="profile-kpi-grid mt-4">
+              <div class="profile-kpi">
+                <p class="profile-kpi-label">Listed Stocks</p>
+                <p id="profileStocksCount" class="profile-kpi-value">0</p>
+              </div>
+              <div class="profile-kpi">
+                <p class="profile-kpi-label">Profile Score</p>
+                <p id="profileCompleteness" class="profile-kpi-value">0%</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="surface-card p-6 xl:col-span-3">
+            <h2 class="text-2xl font-semibold text-slate-900">Company Profile</h2>
+            <p class="mt-1 text-sm text-slate-500">Update your company details shown to investors.</p>
+            <form id="profileForm" class="mt-6 space-y-4">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Company Name</label>
+                <input type="text" id="profileCompanyName" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Industry</label>
+                <input type="text" id="profileIndustry" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Founded Year</label>
+                <input type="number" id="profileFoundedYear" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Funding Needed</label>
+                <input type="text" id="profileFundingNeeded" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Equity Offered (%)</label>
+                <input type="number" id="profileEquityOffered" min="0" max="100" step="0.01" />
+              </div>
+              <button type="submit" class="primary-btn">
+                Save Profile
+              </button>
+            </form>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="/company-dashboard-pro.js"></script>
+</body>
+</html>

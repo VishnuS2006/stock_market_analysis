@@ -1,0 +1,4 @@
+[dotenv@17.3.1] injecting env (2) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+Server running on port 5060
+Mongoose connected
+MongoDB connected: mongodb://127.0.0.1:27017/stockDB

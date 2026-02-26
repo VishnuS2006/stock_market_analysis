@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Investor Dashboard - StockFund</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Manrope", "sans-serif"],
+              display: ["Outfit", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glow-button {
+        background: #4f46e5;
+        color: #fff;
+        transition: all 200ms ease-in-out;
+      }
+
+      .glow-button:hover {
+        background: #4338ca;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+      }
+
+      .input-field {
+        width: 100%;
+        border-radius: 0.5rem;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        padding: 0.55rem 0.8rem;
+        font-size: 0.875rem;
+        color: #111827;
+        transition: all 200ms ease-in-out;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      }
+
+      .stock-row:hover {
+        background: #f9fafb;
+      }
+
+      .modal.hidden {
+        display: none !important;
+      }
+
+      .toast {
+        position: fixed;
+        right: 1.25rem;
+        top: 1.25rem;
+        z-index: 100;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: 1px solid transparent;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+        background: #eff6ff;
+        color: #1d4ed8;
+        border-color: #bfdbfe;
+      }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased">
+    <header class="sticky top-0 z-20 border-b border-gray-200 bg-white shadow-sm">
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+            <div>
+                <h1 class="font-display text-2xl font-semibold text-gray-900">StockFund</h1>
+                <p class="text-xs uppercase tracking-[0.16em] text-gray-500">Investor Dashboard</p>
+            </div>
+            <button id="logoutBtn" class="glow-button rounded-lg px-4 py-2 text-sm font-medium">Logout</button>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl space-y-6 p-6">
+        <section class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 class="mb-4 text-xl font-semibold text-gray-900">Search and Filters</h2>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-5">
+                <input id="searchInput" type="text" placeholder="Search by name or symbol" class="input-field md:col-span-2" />
+                <select id="sectorFilter" class="input-field">
+                    <option value="">All Sectors</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Energy">Energy</option>
+                    <option value="Other">Other</option>
+                </select>
+                <select id="sortSelect" class="input-field">
+                    <option value="">Sort by</option>
+                    <option value="price_asc">Price (Low to High)</option>
+                    <option value="price_desc">Price (High to Low)</option>
+                    <option value="cap_asc">Market Cap (Low)</option>
+                    <option value="cap_desc">Market Cap (High)</option>
+                </select>
+                <div class="flex gap-2">
+                    <button id="applyFilters" class="glow-button flex-1 rounded-lg px-4 py-2 text-sm font-medium">Apply</button>
+                    <button id="clearFilters" class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-gray-100">Clear</button>
+                </div>
+            </div>
+
+            <button id="advancedToggle" class="mt-4 text-sm font-medium text-indigo-600 transition-all duration-200 hover:text-indigo-700">Advanced Filters</button>
+            <div id="advancedFilters" class="mt-4 hidden grid-cols-1 gap-4 border-t border-gray-200 pt-4 md:grid md:grid-cols-4">
+                <input id="minPrice" type="number" placeholder="Min Price" class="input-field" />
+                <input id="maxPrice" type="number" placeholder="Max Price" class="input-field" />
+                <input id="minCap" type="number" placeholder="Min Market Cap" class="input-field" />
+                <input id="maxCap" type="number" placeholder="Max Market Cap" class="input-field" />
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 gap-6 md:grid-cols-4">
+            <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <p class="text-sm text-gray-500">Total Stocks Listed</p>
+                <h3 id="totalStocksCount" class="mt-2 text-3xl font-semibold text-gray-900">0</h3>
+            </article>
+            <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <p class="text-sm text-gray-500">Active IPOs</p>
+                <h3 id="activeIpos" class="mt-2 text-3xl font-semibold text-gray-900">0</h3>
+            </article>
+            <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <p class="text-sm text-gray-500">Average Price</p>
+                <h3 id="avgPrice" class="mt-2 text-3xl font-semibold text-gray-900">$0</h3>
+            </article>
+            <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <p class="text-sm text-gray-500">Total Market Cap</p>
+                <h3 id="totalCap" class="mt-2 text-3xl font-semibold text-gray-900">$0</h3>
+            </article>
+        </section>
+
+        <section class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-left">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">Symbol</th>
+                            <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">Company</th>
+                            <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">Sector</th>
+                            <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">Price</th>
+                            <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">Market Cap</th>
+                            <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">P/E Ratio</th>
+                            <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stocksTableBody"></tbody>
+                </table>
+            </div>
+            <p id="noStocksMsg" class="px-4 py-10 text-center text-sm text-gray-500">No stocks found. Try adjusting filters.</p>
+        </section>
+    </main>
+
+    <div id="detailModal" class="modal fixed inset-0 z-50 bg-black/30 p-4 backdrop-blur-sm hidden">
+        <div class="flex min-h-full items-center justify-center">
+            <div class="w-full max-w-3xl rounded-xl border border-gray-200 bg-white p-6 shadow-xl">
+                <div class="mb-4 flex items-start justify-between">
+                    <div>
+                        <h2 id="detailSymbol" class="text-2xl font-semibold text-gray-900"></h2>
+                        <p id="detailCompanyName" class="text-sm text-gray-500"></p>
+                    </div>
+                    <button id="detailClose" class="rounded-lg border border-gray-300 bg-white px-3 py-1 text-sm text-gray-700 transition-all duration-200 hover:bg-gray-100">Close</button>
+                </div>
+
+                <div class="mb-6 h-64">
+                    <canvas id="detailChart"></canvas>
+                </div>
+
+                <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                        <p class="text-xs text-gray-500">Current Price</p>
+                        <p id="detailPrice" class="mt-1 text-xl font-semibold text-gray-900"></p>
+                    </div>
+                    <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                        <p class="text-xs text-gray-500">Market Cap</p>
+                        <p id="detailCap" class="mt-1 text-xl font-semibold text-gray-900"></p>
+                    </div>
+                    <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                        <p class="text-xs text-gray-500">P/E Ratio</p>
+                        <p id="detailPE" class="mt-1 text-xl font-semibold text-gray-900"></p>
+                    </div>
+                    <div class="rounded-lg border border-gray-200 bg-gray-50 p-3">
+                        <p class="text-xs text-gray-500">EPS</p>
+                        <p id="detailEPS" class="mt-1 text-xl font-semibold text-gray-900"></p>
+                    </div>
+                </div>
+
+                <div id="ipoSection" class="hidden rounded-xl border border-gray-200 bg-white p-4">
+                    <h3 class="mb-3 text-lg font-semibold text-gray-900">IPO Details</h3>
+                    <div class="grid grid-cols-2 gap-3 text-sm text-gray-600">
+                        <div>
+                            <p class="text-xs text-gray-500">Issue Price</p>
+                            <p id="ipoIssuePrice" class="font-medium text-gray-900">N/A</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Total Shares</p>
+                            <p id="ipoTotalShares" class="font-medium text-gray-900">N/A</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Listing Date</p>
+                            <p id="ipoListingDate" class="font-medium text-gray-900">N/A</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Status</p>
+                            <p id="ipoStatus" class="font-medium text-gray-900">N/A</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="investor-dashboard-pro.js"></script>
+</body>
+</html>
